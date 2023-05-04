@@ -1,28 +1,25 @@
 const path = require('path');
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { dialog } = require('electron');
 
-const isDev = process.env.NODE_ENV === 'production';
 const isMac = process.platform === 'darwin';
 
 function createMainWindow () {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
         title: 'Classify App',
-        width: isDev ? 1280 : 1980,
-        height: isDev ? 800 : 1080,
+        width:  1280,
+        height: 800,
         webPreferences: {
-            nodeIntegration: true
+            preload: path.join(__dirname, 'preload.js')
         },
         icon: './renderer/images/classify-logo.png'
     })
+    ipcMain.handle('dialog', (_, title, content) => dialog.showErrorBox(title, content));
+    ipcMain.handle('setToken', (_, token) => Store.setItem('token', token));
 
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, './renderer/sign-in.html'))
-
-    // Open the DevTools.
-    if(isDev) {
-      mainWindow.webContents.openDevTools();
-    }
+    mainWindow.loadFile(path.join(__dirname, './renderer/sign-in.html'));
 }   
 
 app.whenReady().then(() => {
