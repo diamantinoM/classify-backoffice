@@ -34,6 +34,7 @@ async function showAllAds() {
 
 function renderAds(data, statusAds) {
     const allAds = data.ads;
+    console.log(allAds);
     const ads = allAds.filter(ad => ad.status_id === statusAds); // ad_status_id
     const activeAds = allAds.filter(ad => ad.status_id === adStatus.active);
     const inactiveAds = allAds.filter(ad => ad.status_id === adStatus.inactive);
@@ -67,8 +68,8 @@ function renderAds(data, statusAds) {
         const divPhoto = document.createElement('div');
         divPhoto.classList.add('table_photo');
         const imgPhoto = document.createElement('img');
-        imgPhoto.setAttribute('src', `../renderer/images/ads-7.png`);
-        imgPhoto.setAttribute('alt', `${ad.title}`);
+        imgPhoto.setAttribute('src', `${ad.AdImages[0].image_path_url}`);
+        imgPhoto.setAttribute('alt', `${ad.AdImages[0].image_name}`);
         divPhoto.appendChild(imgPhoto);
         photoElement.appendChild(divPhoto);
         row.appendChild(photoElement);
@@ -92,7 +93,7 @@ function renderAds(data, statusAds) {
         const divSubCategory = document.createElement('div');
         divSubCategory.classList.add('table_category');
         const pSubCategory = document.createElement('p');
-        pSubCategory.textContent = `${ad.subcategory_id} SUB_NAME`;
+        pSubCategory.textContent = `${ad.subcategory.subcategory_name}`;
         divSubCategory.appendChild(pSubCategory);
         subCategoryElement.appendChild(divSubCategory);
         row.appendChild(subCategoryElement);
@@ -103,12 +104,10 @@ function renderAds(data, statusAds) {
         const divStatus = document.createElement('div');
         divStatus.classList.add('table_status');
         const spanStatus = document.createElement('span');
-        // spanStatus.classList.add(`${ad.status_name_internal}`);
-        spanStatus.classList.add('inactive');
-        // spanStatus.setAttribute('title', `${ad.status_description}`);
-        spanStatus.setAttribute('title', 'este anuncio nao existe?');
-        // spanStatus.textContent = ad.status_name;
-        spanStatus.textContent = 'inativo';
+        spanStatus.classList.add(`${ad.status.status_name_internal}`);
+        
+        spanStatus.setAttribute('title', `${ad.status.status_description}`);
+        spanStatus.textContent = ad.status.status_name;
         divStatus.appendChild(spanStatus);
         statusElement.appendChild(divStatus);
         row.appendChild(statusElement);
