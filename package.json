@@ -12,6 +12,10 @@
     "electron": "^24.1.2"
   },
   "dependencies": {
+    "electron-alert": "^0.1.20",
+    "electron-store": "^8.1.0",
+    "safe-storage": "^1.0.2",
+    "secure-electron-store": "^4.0.2",
     "toastify-js": "^1.12.0"
   }
 }
