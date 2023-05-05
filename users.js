@@ -80,7 +80,6 @@ async function deleteUser({currentTarget}) {
 
 function renderUsers(data, status){
     const allUsers = data.users;
-    // console.log(allUsers);
     const activeUsers = allUsers.filter(user => user.is_active === userStatus.isActive);
     const inactiveUsers = allUsers.filter(user => user.is_active === userStatus.isInactive);
     const users = allUsers.filter(user => user.is_active === status); // ad_status_id
