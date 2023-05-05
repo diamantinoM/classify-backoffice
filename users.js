@@ -91,6 +91,8 @@ function renderUsers(data, status){
     tableBody.innerHTML = '';
 
     users.forEach((user) => {
+        promoCounter = user.Ads.filter(ad => ad.promo_id !== 1 ).length;
+        
         const row = document.createElement('tr');
 
         const checkboxElement = document.createElement('td');
@@ -152,7 +154,7 @@ function renderUsers(data, status){
         spanPromo.classList.add(`${user.user_id}`);
         
         spanPromo.setAttribute('title', 'user-id');
-        spanPromo.textContent = 13;
+        spanPromo.textContent = promoCounter;
         divPromo.appendChild(spanPromo);
         promoElement.appendChild(divPromo);
         row.appendChild(promoElement);
