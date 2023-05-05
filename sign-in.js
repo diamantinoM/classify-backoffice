@@ -16,7 +16,15 @@ async function signIn(event) {
             })
         });
         if (!response.ok) {
-            return (await window.versions.dialog('Error', 'As suas credenciais estão incorretas. Tente novamente!'));
+            const errorBox = await window.versions.dialog(
+                {type: 'error',
+                message: 'As suas credenciais estão incorretas. Tente novamente!',
+                buttons: ['Continuar'],
+                title: 'Classify',
+                icon: './renderer/images/classify-logo.png',
+                detail: 'Em caso de perda das suas credenciais, entre em contato com o administrador.'
+            });
+            return errorBox;
         }
         const { token } = await response.json();
         const tokenInfo = window.sessionStorage.setItem('token', token); // using sessionStorage to store the token

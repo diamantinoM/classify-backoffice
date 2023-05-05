@@ -157,8 +157,8 @@
                                         <i class="fal fa-file-alt"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Utilizadores Ativos</a></h6>
-                                        <p>480 Utilizadores</p>
+                                        <h6 class="title"><a id="active_users" style="cursor: pointer;">Utilizadores Ativos</a></h6>
+                                        <p id="p_active"></p>
                                     </div>
                                 </div>
                             </div>
@@ -168,19 +168,8 @@
                                         <i class="fal fa-file-plus"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Utilizadores Removidos</a></h6>
-                                        <p>80 Utilizadores</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="single_dashboard_box d-flex">
-                                    <div class="box_icon">
-                                        <i class="fal fa-envelope-open-text"></i>
-                                    </div>
-                                    <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">TO THINK</a></h6>
-                                        <p>2040 Utilizadores</p>
+                                        <h6 class="title"><a id="inactive_users" style="cursor: pointer;">Utilizadores Inativos</a></h6>
+                                        <p id="p_inactive"></p>
                                     </div>
                                 </div>
                             </div>
@@ -199,8 +188,8 @@
                                         <th class="photo">Foto</th>
                                         <th class="title">Nome</th>
                                         <th class="category">Email</th>
-                                        <th class="status">Promos</th>
-                                        <th class="price">Financiamento</th>
+                                        <th class="status" style="min-width: 75px;">Promos</th>
+                                        <!-- <th class="price">Financiamento</th> -->
                                         <th class="action">Ação</th>
                                     </tr>
                                 </thead>
@@ -215,37 +204,36 @@
                                             </div>
                                         </td>
                                         <td class="photo">
-                                            <div class="table_photo">
-                                                <img src="../renderer/images/ads-7.png" alt="ads">
+                                            <div class="table_photo" style="width: 4rem;">
+                                                <img src="./images/author-2.jpg" alt="ads">
                                             </div>
                                         </td>
                                         <td class="title">
                                             <div class="table_title">
-                                                <h6 class="titles">8 GB DDR4 Ram, 4th Gen</h6>
-                                                <p>Ad ID: ng3D5hAMHPajQrM</p>
+                                                <h6 class="titles"></h6>
+                                                <p></p>
                                             </div>
                                         </td>
                                         <td class="category">
                                             <div class="table_category">
-                                                <p>Ram & Laptop</p>
+                                                <p></p>
                                             </div>
                                         </td>
-                                        <td class="status">
+                                        <td class="status" style="text-align: center;">
                                             <div class="table_status">
-                                                <span class="deleted">Deleted</span>
+                                                <span class="deleted"></span>
                                             </div>
                                         </td>
-                                        <td class="price">
+                                        <!-- <td class="price">
                                             <div class="table_price">
-                                                <span>$299.00</span>
+                                                <span></span>
                                             </div>
-                                        </td>
+                                        </td> -->
                                         <td class="action">
                                             <div class="table_action">
                                                 <ul>
-                                                    <li><a href="#"><i class="fal fa-eye"></i></a></li>
-                                                    <li><a href="#"><i class="fal fa-pencil"></i></a></li>
-                                                    <li><a href="#"><i class="fal fa-trash-alt"></i></a></li>
+                                                    <li><a><i class="fal fa-pencil"></i></a></li>
+                                                    <li><a><i class="fal fa-trash-alt"></i></a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -350,6 +338,8 @@
 
     <!--====== Main js ======-->
     <script src="./js/main-web.js"></script>
+
+    <script src="../users.js"></script>
 
 </body>
 </html>

@@ -16,7 +16,15 @@ async function showAllAds() {
             }
         });
         if(!response.ok) {
-            return (await window.versions.dialog('Error', 'Algo deu errado. Por favor, reinicie a aplicação.'));
+            const errorBox = await window.versions.dialog(
+                {type: 'error',
+                message: 'Algo está errado! Reinicie a aplicação.',
+                buttons: ['Continuar'],
+                title: 'Classify',
+                icon: './renderer/images/classify-logo.png',
+                detail: 'Em caso deste erro persistir, entre em contato com o administrador.'
+            });
+            return errorBox;
         }
         const data = await response.json();
         totalAds = data;
