@@ -35,14 +35,51 @@ async function showAllAds() {
         }else {
             renderAds(data, adStatus.inactive);
         }
-    }catch(err) {
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+async function deleteAd({currentTarget}) {
+    const adId = currentTarget.dataset.adid;
+    const infoBox = await window.versions.dialog(
+        {type: 'info',
+        message: 'Tem certeza que deseja excluir este anúncio?',
+        buttons: ['Sim', 'Cancelar'],
+        cancelId: 1,
+        title: 'Classify | Eliminar Anúncio',
+        icon: './renderer/images/classify-logo.png',
+    });
+    if(infoBox.response === 1) {
+        return;
+    }
+    try {
+        const response = await fetch(`http://localhost:3000/ads/${adId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+        if(!response.ok) {
+            const errorBox = await window.versions.dialog(
+                {type: 'error',
+                message: 'Algo está errado! Reinicie a aplicação.',
+                buttons: ['Continuar'],
+                title: 'Classify',
+                icon: './renderer/images/classify-logo.png',
+                detail: 'Em caso deste erro persistir, entre em contato com o administrador.'
+            });
+            return errorBox;
+        }
+        window.location.reload();
+    } catch (err) {
         console.error(err);
     }
 }
 
 function renderAds(data, statusAds) {
     const allAds = data.ads;
-    console.log(allAds);
     const ads = allAds.filter(ad => ad.status_id === statusAds); // ad_status_id
     const activeAds = allAds.filter(ad => ad.status_id === adStatus.active);
     const inactiveAds = allAds.filter(ad => ad.status_id === adStatus.inactive);
@@ -142,11 +179,13 @@ function renderAds(data, statusAds) {
         const aActionFirst = document.createElement('a');
         aActionFirst.style.cursor  = 'pointer';
         const editAction = document.createElement('i');
-        editAction.classList.add('fal', 'fa-pencil');
+        editAction.classList.add('fal', 'fa-eye');
         aActionFirst.append(editAction);
         liActionFirst.append(aActionFirst);
         const liActionSecond = document.createElement('li');
         const aActionSecond = document.createElement('a');
+        aActionSecond.setAttribute('data-adid', `${ad.id}`);
+        aActionSecond.classList.add('delete-ad');
         const deleteAction = document.createElement('i');
         aActionSecond.style.cursor  = 'pointer';
         deleteAction.classList.add('fal', 'fa-trash-alt');
@@ -158,6 +197,8 @@ function renderAds(data, statusAds) {
         row.appendChild(actionsElement);
 
         tableBody.appendChild(row);
+
+        aActionSecond.addEventListener('click', deleteAd);
     });
 }
 

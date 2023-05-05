@@ -28,17 +28,52 @@ async function showAllUsers() {
         }
         const data = await response.json();
         totalUsers = data;
-        const activeUsers = data.users.filter(user => user.is_active === userStatus.isActive);
+
         const inactiveUsers = data.users.filter(user => user.is_active === userStatus.isInactive);
-        console.log(inactiveUsers, activeUsers);
         if (inactiveUsers.length === 0) {
-            console.log('aloactive');
             renderUsers(data, userStatus.isActive);
         }else {
-            console.log('aloinactive');
             renderUsers(data, userStatus.isInactive);
         }
     }catch (err){
+        console.error(err);
+    }
+}
+
+async function deleteUser({currentTarget}) {
+    const userId = currentTarget.dataset.userid;
+    const infoBox = await window.versions.dialog(
+        {type: 'info',
+        message: 'Tem certeza que deseja excluir este utilizador?',
+        buttons: ['Sim', 'Cancelar'],
+        cancelId: 1,
+        title: 'Classify | Eliminar utilizador',
+        icon: './renderer/images/classify-logo.png',
+    });
+    if(infoBox.response === 1) {
+        return;
+    }
+    try {
+        const response = await fetch(`http://localhost:3000/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+        if(!response.ok) {
+            const errorBox = await window.versions.dialog(
+                {type: 'error',
+                message: 'Algo está errado! Reinicie a aplicação.',
+                buttons: ['Continuar'],
+                title: 'Classify',
+                icon: './renderer/images/classify-logo.png',
+                detail: 'Em caso deste erro persistir, entre em contato com o administrador.'
+            });
+            return errorBox;
+        }
+        window.location.reload();
+    } catch (err) {
         console.error(err);
     }
 }
@@ -56,6 +91,8 @@ function renderUsers(data, status){
     tableBody.innerHTML = '';
 
     users.forEach((user) => {
+        promoCounter = user.Ads.filter(ad => ad.promo_id !== 1 ).length;
+        
         const row = document.createElement('tr');
 
         const checkboxElement = document.createElement('td');
@@ -117,7 +154,7 @@ function renderUsers(data, status){
         spanPromo.classList.add(`${user.user_id}`);
         
         spanPromo.setAttribute('title', 'user-id');
-        spanPromo.textContent = 13;
+        spanPromo.textContent = promoCounter;
         divPromo.appendChild(spanPromo);
         promoElement.appendChild(divPromo);
         row.appendChild(promoElement);
@@ -137,6 +174,8 @@ function renderUsers(data, status){
         liActionFirst.append(aActionFirst);
         const liActionSecond = document.createElement('li');
         const aActionSecond = document.createElement('a');
+        aActionSecond.setAttribute('data-userid', `${user.user_id}`);
+        aActionSecond.classList.add('delete-user');
         const deleteAction = document.createElement('i');
         aActionSecond.style.cursor  = 'pointer';
         deleteAction.classList.add('fal', 'fa-trash-alt');
@@ -148,6 +187,8 @@ function renderUsers(data, status){
         row.appendChild(actionsElement);
 
         tableBody.appendChild(row);
+
+        aActionSecond.addEventListener('click', deleteUser);
     });
 }
 
