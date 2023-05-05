@@ -15,9 +15,9 @@ function createMainWindow () {
         },
         icon: './renderer/images/classify-logo.png'
     })
-    ipcMain.handle('dialog', (_, title, content) => dialog.showErrorBox(title, content));
+    ipcMain.handle('dialog', (_, options) => dialog.showMessageBox(options));
     ipcMain.handle('setToken', (_, token) => Store.setItem('token', token));
-
+    
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, './renderer/sign-in.html'));
 }   
