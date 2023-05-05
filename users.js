@@ -40,8 +40,47 @@ async function showAllUsers() {
     }
 }
 
+async function deleteUser({currentTarget}) {
+    const userId = currentTarget.dataset.userid;
+    const infoBox = await window.versions.dialog(
+        {type: 'info',
+        message: 'Tem certeza que deseja excluir este utilizador?',
+        buttons: ['Sim', 'Cancelar'],
+        cancelId: 1,
+        title: 'Classify | Eliminar utilizador',
+        icon: './renderer/images/classify-logo.png',
+    });
+    if(infoBox.response === 1) {
+        return;
+    }
+    try {
+        const response = await fetch(`http://localhost:3000/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${token}`
+            }
+        });
+        if(!response.ok) {
+            const errorBox = await window.versions.dialog(
+                {type: 'error',
+                message: 'Algo está errado! Reinicie a aplicação.',
+                buttons: ['Continuar'],
+                title: 'Classify',
+                icon: './renderer/images/classify-logo.png',
+                detail: 'Em caso deste erro persistir, entre em contato com o administrador.'
+            });
+            return errorBox;
+        }
+        window.location.reload();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 function renderUsers(data, status){
     const allUsers = data.users;
+    // console.log(allUsers);
     const activeUsers = allUsers.filter(user => user.is_active === userStatus.isActive);
     const inactiveUsers = allUsers.filter(user => user.is_active === userStatus.isInactive);
     const users = allUsers.filter(user => user.is_active === status); // ad_status_id
@@ -134,6 +173,8 @@ function renderUsers(data, status){
         liActionFirst.append(aActionFirst);
         const liActionSecond = document.createElement('li');
         const aActionSecond = document.createElement('a');
+        aActionSecond.setAttribute('data-userid', `${user.user_id}`);
+        aActionSecond.classList.add('delete-user');
         const deleteAction = document.createElement('i');
         aActionSecond.style.cursor  = 'pointer';
         deleteAction.classList.add('fal', 'fa-trash-alt');
@@ -145,6 +186,8 @@ function renderUsers(data, status){
         row.appendChild(actionsElement);
 
         tableBody.appendChild(row);
+
+        aActionSecond.addEventListener('click', deleteUser);
     });
 }
 
