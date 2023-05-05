@@ -28,13 +28,14 @@ async function showAllUsers() {
         }
         const data = await response.json();
         totalUsers = data;
-        
-        const inactiveUsers = data.users.filter(user => user.is_active === false);
+        const activeUsers = data.users.filter(user => user.is_active === userStatus.isActive);
+        const inactiveUsers = data.users.filter(user => user.is_active === userStatus.isInactive);
+        console.log(inactiveUsers, activeUsers);
         if (inactiveUsers.length === 0) {
-            console.log(inactiveUsers);
+            console.log('aloactive');
             renderUsers(data, userStatus.isActive);
         }else {
-            console.log('alo');
+            console.log('aloinactive');
             renderUsers(data, userStatus.isInactive);
         }
     }catch (err){
@@ -42,16 +43,14 @@ async function showAllUsers() {
     }
 }
 
-function renderUsers(data, userStatus){
+function renderUsers(data, status){
     const allUsers = data.users;
-    console.log(allUsers);
-    const activeUsers = allUsers.filter(user => user.is_active == userStatus.isActive);
-    const inactiveUsers = allUsers.filter(user => user.is_active == userStatus.isInactive);
-    const users = allUsers.filter(user => user.is_active == userStatus); // ad_status_id
+    const activeUsers = allUsers.filter(user => user.is_active === userStatus.isActive);
+    const inactiveUsers = allUsers.filter(user => user.is_active === userStatus.isInactive);
+    const users = allUsers.filter(user => user.is_active === status); // ad_status_id
     
     pInactive.textContent = `${inactiveUsers.length} Utilizadores`;
     pActive.textContent = `${activeUsers.length} Utilizadores`;
-    // console.log(inactiveUsers);
     
     const tableBody = document.querySelector('.ads_table tbody');
     tableBody.innerHTML = '';
@@ -92,10 +91,8 @@ function renderUsers(data, userStatus){
         const divUsername = document.createElement('div');
         divUsername.classList.add('table_category');
         const hUsername = document.createElement('h6');
-        hUsername.textContent = '';
-        const pUsername = document.createElement('p');
-        pUsername.textContent = `${user.username}`;
-        divUsername.append(hUsername, pUsername);
+        hUsername.textContent = user.username;
+        divUsername.append(hUsername);
         usernameElement.appendChild(divUsername);
         row.appendChild(usernameElement);
 
@@ -105,7 +102,7 @@ function renderUsers(data, userStatus){
         const divUserEmail = document.createElement('div');
         divUserEmail.classList.add('table_title');
         const pUserEmail = document.createElement('p');
-        pUserEmail.textContent = `${user.UserLoginDatum.email_addr}`;
+        pUserEmail.textContent = `${user.UserLoginDatum?.email_addr  ?? 'Email não encontrado'}`;
         divUserEmail.appendChild(pUserEmail);
         userEmailElement.appendChild(divUserEmail);
         row.appendChild(userEmailElement);
@@ -156,8 +153,8 @@ function renderUsers(data, userStatus){
 
 function main() {
     showAllUsers();
-    inactiveUsersBtn.addEventListener('click', () => renderAds(totalUsers, userStatus.isInactive));
-    activeUsersBtn.addEventListener('click', () => renderAds(totalUsers, userStatus.isActive));
+    inactiveUsersBtn.addEventListener('click', () => renderUsers(totalUsers, userStatus.isInactive));
+    activeUsersBtn.addEventListener('click', () => renderUsers(totalUsers, userStatus.isActive));
 }
 
 window.addEventListener('load', main);
