@@ -28,14 +28,11 @@ async function showAllUsers() {
         }
         const data = await response.json();
         totalUsers = data;
-        const activeUsers = data.users.filter(user => user.is_active === userStatus.isActive);
+
         const inactiveUsers = data.users.filter(user => user.is_active === userStatus.isInactive);
-        console.log(inactiveUsers, activeUsers);
         if (inactiveUsers.length === 0) {
-            console.log('aloactive');
             renderUsers(data, userStatus.isActive);
         }else {
-            console.log('aloinactive');
             renderUsers(data, userStatus.isInactive);
         }
     }catch (err){

@@ -42,7 +42,6 @@ async function showAllAds() {
 
 function renderAds(data, statusAds) {
     const allAds = data.ads;
-    console.log(allAds);
     const ads = allAds.filter(ad => ad.status_id === statusAds); // ad_status_id
     const activeAds = allAds.filter(ad => ad.status_id === adStatus.active);
     const inactiveAds = allAds.filter(ad => ad.status_id === adStatus.inactive);
