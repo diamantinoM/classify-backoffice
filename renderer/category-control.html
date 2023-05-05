@@ -157,8 +157,8 @@
                                         <i class="fal fa-file-alt"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Anúncios Ativos</a></h6>
-                                        <p>480 Anúncios</p>
+                                        <h6 class="title"><a id="category_title" style="cursor: pointer;">Categorias</a></h6>
+                                        <p id="p_num_categories"></p>
                                     </div>
                                 </div>
                             </div>
@@ -168,19 +168,8 @@
                                         <i class="fal fa-file-plus"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Anúncios por Revisar</a></h6>
-                                        <p>80 Anúncios</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="single_dashboard_box d-flex">
-                                    <div class="box_icon">
-                                        <i class="fal fa-envelope-open-text"></i>
-                                    </div>
-                                    <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Utilizadores Ativos</a></h6>
-                                        <p>2040 Utilizadores</p>
+                                        <h6 class="title"><a id="subcategory_title" style="cursor: pointer;">Subcategorias</a></h6>
+                                        <p id="p_num_subcategories"></p>
                                     </div>
                                 </div>
                             </div>
@@ -188,67 +177,75 @@
 
                         <div class="ads_table table-responsive mt-30">
                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="checkbox">
-                                            <div class="table_checkbox">
-                                                <input type="checkbox" id="checkbox1">
-                                                <label for="checkbox1"></label>
-                                            </div>
-                                        </th>
-                                        <th class="photo">Foto</th>
-                                        <th class="title">Título</th>
-                                        <th class="category">Subcategoria</th>
-                                        <th class="status">Status</th>
-                                        <th class="price">Preço</th>
-                                        <th class="action">Ação</th>
-                                    </tr>
-                                </thead>
                                 <tbody>
-                                    
-                                    
                                     <tr>
-                                        <td class="checkbox">
-                                            <div class="table_checkbox">
-                                                <input type="checkbox" id="checkbox7">
-                                                <label for="checkbox7"></label>
+                                        <div class="faq_accordion">
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="card">
+                                                    <div class="card-header" id="headingOne">
+                                                        <a style="padding: 15px 30px;
+                                                        cursor: pointer;"
+                                                        data-toggle="collapse"
+                                                        data-target="#collapseOne"
+                                                        aria-expanded="true"
+                                                        aria-controls="collapseOne"
+                                                        >Computadores</a>
+                                                    </div>
+                                                    
+                                                    <div id="collapseOne"
+                                                    class="collapse show"
+                                                    aria-labelledby="headingOne"
+                                                    data-parent="#accordionExample" >
+                                                        <div class="card-body">
+                                                            <ul style="display: grid; margin-left: 1rem;
+                                                            grid-template-columns: repeat(3, 1fr);
+                                                            gap: 10px;">
+                                                                <li style="display: flex;
+                                                                align-items: center;
+                                                                justify-content: space-between;">
+                                                                <span style="font-size: 19px;"><i class="fal fa-desktop" style="margin-right: 0.4rem; color: #ff4367;"></i>
+                                                                    ONE</span>
+                                                                    <a><i style="font-size: 28px;" class="fal fa-trash-alt"></i></a>
+                                                                </li>
+                                                               
+                                                                
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="card">
+                                                    <div class="card-header" id="headingTwo">
+                                                        <a
+                                                        href="#"
+                                                        class="collapsed"
+                                                        data-toggle="collapse"
+                                                        data-target="#collapseTwo"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapseTwo"
+                                                        ><i style="margin-right: 0.5rem; color: #ff4367;"></i>
+                                                        Category Name</a>
+                                                    </div>
+
+                                                    <div id="collapseTwo"
+                                                    class="collapse"
+                                                    aria-labelledby="headingTwo"
+                                                    data-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <ul style="display: grid; margin-left: 1rem;
+                                                            grid-template-columns: repeat(3, 1fr);
+                                                            gap: 10px;">
+                                                                <li>ONE</li>
+                                                                <li>ONE</li>
+                                                                <li>ONE</li>
+                                                                <li>ONE</li>
+                                                                <li>ONE</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </td>
-                                        <td class="photo">
-                                            <div class="table_photo">
-                                                <img src="../renderer/images/ads-7.png" alt="ads">
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="table_title">
-                                                <h6 class="titles">8 GB DDR4 Ram, 4th Gen</h6>
-                                                <p>Ad ID: ng3D5hAMHPajQrM</p>
-                                            </div>
-                                        </td>
-                                        <td class="category">
-                                            <div class="table_category">
-                                                <p>Ram & Laptop</p>
-                                            </div>
-                                        </td>
-                                        <td class="status">
-                                            <div class="table_status">
-                                                <span class="deleted">Deleted</span>
-                                            </div>
-                                        </td>
-                                        <td class="price">
-                                            <div class="table_price">
-                                                <span>$299.00</span>
-                                            </div>
-                                        </td>
-                                        <td class="action">
-                                            <div class="table_action">
-                                                <ul>
-                                                    <li><a href="#"><i class="fal fa-eye"></i></a></li>
-                                                    <li><a href="#"><i class="fal fa-pencil"></i></a></li>
-                                                    <li><a href="#"><i class="fal fa-trash-alt"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
+                                        </div>
                                     </tr>
                                 </tbody>
                             </table>
@@ -351,6 +348,7 @@
 
     <!--====== Main js ======-->
     <script src="./js/main-web.js"></script>
+    <script src="../category.js"></script>
 
 </body>
 </html>
