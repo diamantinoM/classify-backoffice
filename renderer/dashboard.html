@@ -127,18 +127,6 @@
                                       Gerir Categorias
                                     </a>
                                   </li>
-                                  <!-- <li>
-                                    <a href="/profile-settings">
-                                      <i class="fal fa-cog"></i>
-                                      Definições de Perfil
-                                    </a>
-                                  </li> -->
-                                  <!-- <li>
-                                    <a href="/change-password">
-                                      <i class="fal fa-key"></i>
-                                      Alterar Password
-                                    </a>
-                                  </li> -->
                                   <li>
                                     <a href="/privacy-setting">
                                       <i class="fal fa-star"></i>
@@ -161,15 +149,15 @@
                         <div class="post_title">
                             <h5 class="title">Dashboard</h5>
                         </div>
-                        <div class="row">
+                        <div id="ad_user_info" class="row">
                             <div class="col-sm-4">
                                 <div class="single_dashboard_box d-flex">
                                     <div class="box_icon">
                                         <i class="fal fa-file-alt"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Anúncios Ativos</a></h6>
-                                        <p>480 Anúncios</p>
+                                        <h6 class="title"><a id="active_ads" style="cursor: pointer;">Anúncios Ativos</a></h6>
+                                        <p id="p_active"></p>
                                     </div>
                                 </div>
                             </div>
@@ -179,25 +167,14 @@
                                         <i class="fal fa-file-plus"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Anúncios por Revisar</a></h6>
-                                        <p>80 Anúncios</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="single_dashboard_box d-flex">
-                                    <div class="box_icon">
-                                        <i class="fal fa-envelope-open-text"></i>
-                                    </div>
-                                    <div class="box_content media-body">
-                                        <h6 class="title"><a href="#">Utilizadores Ativos</a></h6>
-                                        <p>2040 Utilizadores</p>
+                                        <h6 class="title"><a id="inactive_ads" style="cursor: pointer;">Anúncios Inativos</a></h6>
+                                        <p id="p_inactive"></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="ads_table table-responsive mt-30">
+                        <div class="ads_table table-responsive mt-30" style="overflow-y: scroll; height: 30rem;">
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -254,9 +231,8 @@
                                         <td class="action">
                                             <div class="table_action">
                                                 <ul>
-                                                    <li><a href="#"><i class="fal fa-eye"></i></a></li>
-                                                    <li><a href="#"><i class="fal fa-pencil"></i></a></li>
-                                                    <li><a href="#"><i class="fal fa-trash-alt"></i></a></li>
+                                                    <li><a><i class="fal fa-pencil"></i></a></li>
+                                                    <li><a><i class="fal fa-trash-alt"></i></a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -285,7 +261,6 @@
                     <li><a href="./about">Quem somos</a></li>
                     <li><a href="./contact">Contacto</a></li>
                     <li><a href="./faq">Perguntas Frequentes</a></li>
-                    <!-- <li><a href="./posts/blog">Blog</a></li> -->
                     </ul>
                 </div>
                 </div>
@@ -294,9 +269,6 @@
                     <h5 class="footer_title">Links Úteis</h5>
                     <ul class="link">
                     <li><a href="./pricing">Pacotes de Anúncios</a></li>
-                    <!-- <li><a href="#">Pesquisas populares</a></li> -->
-                    <!-- <li><a href="./user/dashboard">Área do Cliente</a></li> If not logged in -> sing in/up page -->
-                    <!-- <li><a href="#">App Classify</a></li> -->
                     </ul>
                 </div>
                 </div>
@@ -366,7 +338,7 @@
     <!--====== Main js ======-->
     <script src="./js/main-web.js"></script>
 
-    <script src="../dashboard.js" type="module"></script>
+    <script src="../dashboard.js" defer></script>
 
 </body>
 </html>
