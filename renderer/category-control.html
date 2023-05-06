@@ -91,6 +91,17 @@
 
     <!--====== HEADER PART ENDS ======-->
 
+    <!--====== MODAL CATEGORY/SUBCATEGORY PART START ======-->
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div id="modal_content" class="modal-content" style="padding-left: 1rem;">
+            </div>
+        </div>
+    </div>
+
+    <!--====== MODAL PART END ======-->
+
     <!--====== DASHBOARD PART START ======-->
 
     <section class="dashboard_page pt-70 pb-120">
@@ -157,7 +168,9 @@
                                         <i class="fal fa-file-alt"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a id="category_title" style="cursor: pointer;">Categorias</a></h6>
+                                        <h6 class="title"><a data-toggle="modal"
+                                        data-target=".bd-example-modal-lg"
+                                        id="category_title" style="cursor: pointer;">Categorias</a></h6>
                                         <p id="p_num_categories"></p>
                                     </div>
                                 </div>
@@ -168,7 +181,10 @@
                                         <i class="fal fa-file-plus"></i>
                                     </div>
                                     <div class="box_content media-body">
-                                        <h6 class="title"><a id="subcategory_title" style="cursor: pointer;">Subcategorias</a></h6>
+                                        <h6 class="title"><a data-toggle="modal"
+                                        data-target=".bd-example-modal-lg"
+                                        id="subcategory_title"
+                                        style="cursor: pointer;">Subcategorias</a></h6>
                                         <p id="p_num_subcategories"></p>
                                     </div>
                                 </div>
