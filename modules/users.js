@@ -1,10 +1,12 @@
-import { showErrorMessage, showMessage } from "./utils/message-box.js";
+import { showMessage } from "./utils/message-box.js";
 import { getWithAuth, deleteWithAuth } from "./utils/fetch.js";
+import { validateInputData, fillForm } from "./user-handler.js";
 
 const inactiveUsersBtn = document.getElementById("inactive_users");
 const activeUsersBtn = document.getElementById("active_users");
 const pActive = document.getElementById("p_active");
 const pInactive = document.getElementById("p_inactive");
+const form = document.getElementById("update-form");
 const userStatus = { isActive: true, isInactive: false };
 let totalUsers = [];
 
@@ -150,6 +152,10 @@ function renderUsers(data, status) {
     const ulAction = document.createElement("ul");
     const liActionFirst = document.createElement("li");
     const aActionFirst = document.createElement("a");
+    aActionFirst.setAttribute("data-toggle", "modal");
+    aActionFirst.setAttribute("data-target", ".bd-example-modal-lg");
+    aActionFirst.setAttribute("data-userid", user.user_id);
+    aActionFirst.addEventListener("click", fillForm);
     aActionFirst.style.cursor = "pointer";
     const editAction = document.createElement("i");
     editAction.classList.add("fal", "fa-pencil");
@@ -183,6 +189,7 @@ function main() {
   activeUsersBtn.addEventListener("click", () =>
     renderUsers(totalUsers, userStatus.isActive)
   );
+  form.addEventListener("submit", validateInputData);
 }
 
 window.addEventListener("load", main);
