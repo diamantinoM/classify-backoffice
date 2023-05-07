@@ -1,6 +1,6 @@
 import { showErrorMessage, showMessage } from "./utils/message-box.js";
+import { getWithAuth, deleteWithAuth } from "./utils/fetch.js";
 
-const token = window.sessionStorage.getItem("token");
 const inactiveUsersBtn = document.getElementById("inactive_users");
 const activeUsersBtn = document.getElementById("active_users");
 const pActive = document.getElementById("p_active");
@@ -10,16 +10,7 @@ let totalUsers = [];
 
 async function showAllUsers() {
   try {
-    const response = await fetch("http://localhost:3000/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
+    const response = await getWithAuth("http://localhost:3000/users");
     const { users } = await response.json();
     totalUsers = users;
     const inactiveUsers = users.filter(
@@ -48,16 +39,9 @@ async function deleteUser({ currentTarget }) {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:3000/users/${userId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
+    const response = await deleteWithAuth(
+      `http://localhost:3000/users/${userId}`
+    );
     window.location.reload();
   } catch (err) {
     console.error(err);
