@@ -104,6 +104,95 @@
 
     <!--====== HEADER PART ENDS ======-->
 
+    <!--====== MODAL PART STARTS ======-->
+
+    <div
+      class="modal fade bd-example-modal-lg"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myLargeModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div
+          id="modal_content"
+          class="modal-content"
+          style="padding-left: 1rem"
+        >
+          <div class="modal-header">
+            <h1
+              style="font-size: 1.25rem"
+              class="modal-title fs-5"
+              id="exampleModalLabel"
+            >
+              Atualizar dados de Utilizador
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-dismiss="modal"
+              aria-label="Close"
+              style="padding: 0.2rem 0.6rem; border: 0; border-radius: 50%"
+            >
+              X
+            </button>
+          </div>
+          <form
+            id="update-form"
+            method="PUT"
+            action="http://localhost:3000/users"
+          >
+            <div>
+              <div class="post_form">
+                <div class="post_title">
+                  <h5 class="title">Insira os novos dados abaixo</h5>
+                </div>
+                <div class="single_form">
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Nome do utilizador"
+                  />
+                </div>
+                <div class="single_form">
+                  <input
+                    type="text"
+                    name="email_addr"
+                    placeholder="Endereço de e-mail: mail@mail.com"
+                  />
+                </div>
+                <div class="single_form">
+                  <input
+                    type="text"
+                    name="phone_number"
+                    placeholder="+351 123 456 789"
+                  />
+                </div>
+                <div class="single_form">
+                  <input type="date" name="birth_date" />
+                </div>
+                <div class="single_form">
+                  <input
+                    data-status="inactive"
+                    id="active"
+                    type="checkbox"
+                    name="is_active"
+                  />
+                  <label for="active"></label>
+                  <span>Ativar conta</span>
+                </div>
+                <div class="single_form">
+                  <button class="main-btn">Criar</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--====== MODAL PART ENDS ======-->
+
     <!--====== DASHBOARD PART START ======-->
 
     <section class="dashboard_page pt-70 pb-120">
