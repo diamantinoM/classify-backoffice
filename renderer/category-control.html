@@ -104,97 +104,106 @@
 
     <!--====== HEADER PART ENDS ======-->
 
+    <!--====== MODAL CATEGORY/SUBCATEGORY PART START ======-->
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div id="modal_content" class="modal-content" style="padding-left: 1rem;">
+            </div>
+        </div>
+    </div>
+
+    <!--====== MODAL PART END ======-->
+
     <!--====== DASHBOARD PART START ======-->
 
     <section class="dashboard_page pt-70 pb-120">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3">
-            <div class="sidebar_profile mt-50">
-              <div class="profile_user">
-                <div class="user_author d-flex align-items-center">
-                  <div class="author">
-                    <img src="../renderer/images/author-1.jpg" alt="" />
-                  </div>
-                  <div class="user_content media-body">
-                    <h6 class="author_name">User</h6>
-                    <p>Administrator</p>
-                  </div>
-                </div>
-                <div class="user_list">
-                  <ul>
-                    <li>
-                      <a href="./dashboard.html">
-                        <i class="fal fa-tachometer-alt-average"></i>
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <a href="./user-control.html">
-                        <i class="fal fa-user"></i>
-                        Gerir Utilizadores
-                      </a>
-                    </li>
-                    <li>
-                      <a href="./category-control.html">
-                        <i class="fal fa-tag"></i>
-                        Gerir Categorias
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/privacy-setting">
-                        <i class="fal fa-star"></i>
-                        Definições de Privacidade
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/logout">
-                        <i class="fal fa-sign-out"></i>
-                        Sair
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-9">
-            <div class="dashboard_content mt-50">
-              <div class="post_title">
-                <h5 class="title">Categorias</h5>
-              </div>
-              <div class="row">
-                <div class="col-sm-4">
-                  <div class="single_dashboard_box d-flex">
-                    <div class="box_icon">
-                      <i class="fal fa-file-alt"></i>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="sidebar_profile mt-50">
+                        <div class="profile_user">
+                            <div class="user_author d-flex align-items-center">
+                                <div class="author">
+                                    <img src="../renderer/images/author-1.jpg" alt="">
+                                </div>
+                                <div class="user_content media-body">
+                                    <h6 class="author_name">User</h6>
+                                    <p>Administrator</p>
+                                </div>
+                            </div>
+                            <div class="user_list">
+                                <ul>
+                                  <li>
+                                    <a href="./dashboard.html">
+                                      <i class="fal fa-tachometer-alt-average"></i>
+                                      Dashboard
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="./user-control.html">
+                                      <i class="fal fa-user"></i>
+                                      Gerir Utilizadores
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="./category-control.html">
+                                        <i class="fal fa-tag"></i>
+                                      Gerir Categorias
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="/privacy-setting">
+                                      <i class="fal fa-star"></i>
+                                      Definições de Privacidade
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="/logout">
+                                      <i class="fal fa-sign-out"></i>
+                                      Sair
+                                    </a>
+                                  </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="box_content media-body">
-                      <h6 class="title">
-                        <a id="category_title" style="cursor: pointer"
-                          >Categorias</a
-                        >
-                      </h6>
-                      <p id="p_num_categories"></p>
-                    </div>
-                  </div>
                 </div>
-                <div class="col-sm-4">
-                  <div class="single_dashboard_box d-flex">
-                    <div class="box_icon">
-                      <i class="fal fa-file-plus"></i>
-                    </div>
-                    <div class="box_content media-body">
-                      <h6 class="title">
-                        <a id="subcategory_title" style="cursor: pointer"
-                          >Subcategorias</a
-                        >
-                      </h6>
-                      <p id="p_num_subcategories"></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                <div class="col-lg-9">
+                    <div class="dashboard_content mt-50">
+                        <div class="post_title">
+                            <h5 class="title">Categorias</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="single_dashboard_box d-flex">
+                                    <div class="box_icon">
+                                        <i class="fal fa-file-alt"></i>
+                                    </div>
+                                    <div class="box_content media-body">
+                                        <h6 class="title"><a data-toggle="modal"
+                                        data-target=".bd-example-modal-lg"
+                                        id="category_title" 
+                                        style="cursor: pointer;">Categorias</a></h6>
+                                        <p id="p_num_categories"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="single_dashboard_box d-flex">
+                                    <div class="box_icon">
+                                        <i class="fal fa-file-plus"></i>
+                                    </div>
+                                    <div class="box_content media-body">
+                                        <h6 class="title"><a data-toggle="modal"
+                                        data-target=".bd-example-modal-lg"
+                                        id="subcategory_title" 
+                                        style="cursor: pointer;">Subcategorias</a></h6>
+                                        <p id="p_num_subcategories"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
               <div class="ads_table table-responsive mt-30">
                 <table class="table">
