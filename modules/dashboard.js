@@ -1,7 +1,13 @@
 import { buildAdInfo, setApprovingEvent } from "./ad-handler.js";
-import { showErrorMessage, showMessage } from "./utils/message-box.js";
+import { showMessage } from "./utils/message-box.js";
+import { getWithAuth, deleteWithAuth } from "./utils/fetch.js";
+import {
+  createElementWithClass,
+  createElementWithAttr,
+  createElementWithContent,
+  createGenericElement,
+} from "./utils/build-elements.js";
 
-const token = window.sessionStorage.getItem("token");
 const inactiveAdsBtn = document.getElementById("inactive_ads");
 const activeAdsBtn = document.getElementById("active_ads");
 const pActive = document.getElementById("p_active");
@@ -13,15 +19,7 @@ async function fetchAdData({ currentTarget }) {
   const adId = currentTarget.dataset.adid;
 
   try {
-    const response = await fetch(`http://localhost:3000/ads/${adId}`, {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
+    const response = await getWithAuth(`http://localhost:3000/ads/${adId}`);
     const { ad } = await response.json();
     buildAdInfo(ad);
   } catch (err) {
@@ -31,27 +29,15 @@ async function fetchAdData({ currentTarget }) {
 
 async function showAllAds() {
   try {
-    const response = await fetch("http://localhost:3000/ads", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
-    const data = await response.json();
-    totalAds = data;
+    const response = await getWithAuth("http://localhost:3000/ads");
+    const { ads } = await response.json();
+    totalAds = ads;
 
-    const inactiveAds = data.ads.filter(
-      (ad) => ad.status_id === adStatus.inactive
-    );
-    if (inactiveAds.length === 0) {
-      renderAds(data, adStatus.active);
-    } else {
-      renderAds(data, adStatus.inactive);
+    const inactiveAds = ads.filter((ad) => ad.status_id === adStatus.inactive);
+    if (!inactiveAds.length) {
+      return renderAds(ads, adStatus.active);
     }
+    return renderAds(ads, adStatus.inactive);
   } catch (err) {
     console.error(err);
   }
@@ -70,27 +56,19 @@ async function deleteAd({ currentTarget }) {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:3000/ads/${adId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage("Algo está errado! Reinicie a aplicação.");
-    }
+    const response = await deleteWithAuth(`http://localhost:3000/ads/${adId}`);
     window.location.reload();
   } catch (err) {
     console.error(err);
   }
 }
 
-function renderAds(data, statusAds) {
-  const allAds = data.ads;
-  const ads = allAds.filter((ad) => ad.status_id === statusAds); // ad_status_id
-  const activeAds = allAds.filter((ad) => ad.status_id === adStatus.active);
-  const inactiveAds = allAds.filter((ad) => ad.status_id === adStatus.inactive);
+function renderAds(adsData, statusAds) {
+  const ads = adsData.filter((ad) => ad.status_id === statusAds); // ad_status_id
+  const activeAds = adsData.filter((ad) => ad.status_id === adStatus.active);
+  const inactiveAds = adsData.filter(
+    (ad) => ad.status_id === adStatus.inactive
+  );
 
   pInactive.textContent = `${inactiveAds.length} Anúncios`;
   pActive.textContent = `${activeAds.length} Anúncios`;
@@ -101,66 +79,58 @@ function renderAds(data, statusAds) {
   ads.forEach((ad) => {
     const row = document.createElement("tr");
 
-    const checkboxElement = document.createElement("td");
-    checkboxElement.classList.add("checkbox");
-
-    const divCheckBox = document.createElement("div");
-    divCheckBox.classList.add("table_checkbox");
-    const inputCheckBox = document.createElement("input");
-    inputCheckBox.setAttribute("type", "checkbox");
-    inputCheckBox.setAttribute("id", `checkbox${ad.id}`);
-    const labelCheckBox = document.createElement("label");
-    labelCheckBox.setAttribute("for", `checkbox${ad.id}`);
+    const checkboxElement = createElementWithClass("td", ["checkbox"]);
+    const divCheckBox = createElementWithClass("div", ["table_checkbox"]);
+    const inputCheckBox = createElementWithAttr("input", {
+      type: "checkbox",
+      id: `checkbox${ad.id}`,
+    });
+    const labelCheckBox = createElementWithAttr("label", {
+      for: `checkbox${ad.id}`,
+    });
     divCheckBox.append(inputCheckBox, labelCheckBox);
     checkboxElement.appendChild(divCheckBox);
     row.appendChild(checkboxElement);
 
-    const photoElement = document.createElement("td");
-    photoElement.classList.add("photo");
+    const photoElement = createElementWithClass("td", ["photo"]);
 
-    const divPhoto = document.createElement("div");
-    divPhoto.classList.add("table_photo");
-    const imgPhoto = document.createElement("img");
-    imgPhoto.setAttribute("src", `${ad.AdImages[0].image_path_url}`);
-    imgPhoto.setAttribute("alt", `${ad.AdImages[0].image_name}`);
+    const divPhoto = createElementWithClass("div", ["table_photo"]);
+    const imgPhoto = createElementWithAttr("img", {
+      src: `${ad.AdImages[0].image_path_url}`,
+      alt: `${ad.AdImages[0].image_name}`,
+    });
     divPhoto.appendChild(imgPhoto);
     photoElement.appendChild(divPhoto);
     row.appendChild(photoElement);
 
-    const titleElement = document.createElement("td");
-    titleElement.classList.add("title");
+    const titleElement = createElementWithClass("td", ["title"]);
 
-    const divTitle = document.createElement("div");
-    divTitle.classList.add("table_title");
-    const hTitle = document.createElement("h6");
-    hTitle.textContent = ad.title;
-    const pTitle = document.createElement("p");
-    pTitle.textContent = `Ad ID: ${ad.id}`;
+    const divTitle = createElementWithClass("div", ["table_title"]);
+    const hTitle = createElementWithContent("h6", ad.title);
+    const pTitle = createElementWithContent("p", `Ad ID: ${ad.id}`);
     divTitle.append(hTitle, pTitle);
     titleElement.appendChild(divTitle);
     row.appendChild(titleElement);
 
-    const subCategoryElement = document.createElement("td");
-    subCategoryElement.classList.add("category");
-
-    const divSubCategory = document.createElement("div");
-    divSubCategory.classList.add("table_category");
-    const pSubCategory = document.createElement("p");
-    pSubCategory.textContent = `${ad.subcategory.subcategory_name}`;
+    const subCategoryElement = createElementWithClass("td", ["category"]);
+    const divSubCategory = createElementWithClass("div", ["table_category"]);
+    const pSubCategory = createElementWithContent(
+      "p",
+      ad.subcategory.subcategory_name
+    );
     divSubCategory.appendChild(pSubCategory);
     subCategoryElement.appendChild(divSubCategory);
     row.appendChild(subCategoryElement);
 
-    const statusElement = document.createElement("td");
-    statusElement.classList.add("category");
+    const statusElement = createElementWithClass("td", ["category"]);
 
-    const divStatus = document.createElement("div");
-    divStatus.classList.add("table_status");
-    const spanStatus = document.createElement("span");
-    spanStatus.classList.add(`${ad.status.status_name_internal}`);
-
-    spanStatus.setAttribute("title", `${ad.status.status_description}`);
-    spanStatus.textContent = ad.status.status_name;
+    const divStatus = createElementWithClass("div", ["table_status"]);
+    const spanStatus = createGenericElement(
+      "span",
+      [ad.status.status_name_internal],
+      { title: ad.status.status_description },
+      ad.status.status_name
+    );
     divStatus.appendChild(spanStatus);
     statusElement.appendChild(divStatus);
     row.appendChild(statusElement);
@@ -168,39 +138,36 @@ function renderAds(data, statusAds) {
     const priceElement = document.createElement("td");
     priceElement.classList.add("price");
 
-    const divPrice = document.createElement("div");
-    divPrice.classList.add("table_price");
-    const spanPrice = document.createElement("span");
-    spanPrice.textContent = `${prettyPrice(ad.price)}€`;
-    prettyPrice(ad.price);
+    const divPrice = createElementWithClass("div", ["table_price"]);
+    const spanPrice = createElementWithContent(
+      "span",
+      `${prettyPrice(ad.price)}€`
+    );
     divPrice.appendChild(spanPrice);
     priceElement.appendChild(divPrice);
     row.appendChild(priceElement);
 
-    const actionsElement = document.createElement("td");
-    actionsElement.classList.add("action");
+    const actionsElement = createElementWithClass("td", ["action"]);
 
-    const divAction = document.createElement("div");
-    divAction.classList.add("table_action");
+    const divAction = createElementWithClass("div", ["table_action"]);
     const ulAction = document.createElement("ul");
     const liActionFirst = document.createElement("li");
-    const aActionFirst = document.createElement("a");
-    aActionFirst.style.cursor = "pointer";
-    aActionFirst.setAttribute("data-toggle", "modal");
-    aActionFirst.setAttribute("data-target", "#exampleModal");
-    aActionFirst.setAttribute("data-adid", `${ad.id}`);
+    const aActionFirst = createElementWithAttr("a", {
+      "data-toggle": "modal",
+      "data-target": "#exampleModal",
+      "data-adid": ad.id,
+    });
     aActionFirst.addEventListener("click", fetchAdData);
-    const editAction = document.createElement("i");
-    editAction.classList.add("fal", "fa-eye");
+    aActionFirst.style.cursor = "pointer";
+    const editAction = createElementWithClass("i", ["fal", "fa-eye"]);
     aActionFirst.append(editAction);
     liActionFirst.append(aActionFirst);
     const liActionSecond = document.createElement("li");
-    const aActionSecond = document.createElement("a");
-    aActionSecond.setAttribute("data-adid", `${ad.id}`);
-    aActionSecond.classList.add("delete-ad");
-    const deleteAction = document.createElement("i");
+    const aActionSecond = createGenericElement("a", ["delete-ad"], {
+      "data-adid": ad.id,
+    });
+    const deleteAction = createElementWithClass("i", ["fal", "fa-trash-alt"]);
     aActionSecond.style.cursor = "pointer";
-    deleteAction.classList.add("fal", "fa-trash-alt");
     aActionSecond.append(deleteAction);
     liActionSecond.append(aActionSecond);
     ulAction.append(liActionFirst, liActionSecond);

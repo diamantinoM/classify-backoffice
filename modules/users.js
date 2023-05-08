@@ -1,25 +1,18 @@
-import { showErrorMessage, showMessage } from "./utils/message-box.js";
+import { showMessage } from "./utils/message-box.js";
+import { getWithAuth, deleteWithAuth } from "./utils/fetch.js";
+import { validateInputData, fillForm } from "./user-handler.js";
 
-const token = window.sessionStorage.getItem("token");
 const inactiveUsersBtn = document.getElementById("inactive_users");
 const activeUsersBtn = document.getElementById("active_users");
 const pActive = document.getElementById("p_active");
 const pInactive = document.getElementById("p_inactive");
+const form = document.getElementById("update-form");
 const userStatus = { isActive: true, isInactive: false };
 let totalUsers = [];
 
 async function showAllUsers() {
   try {
-    const response = await fetch("http://localhost:3000/users", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
+    const response = await getWithAuth("http://localhost:3000/users");
     const { users } = await response.json();
     totalUsers = users;
     const inactiveUsers = users.filter(
@@ -48,16 +41,9 @@ async function deleteUser({ currentTarget }) {
     return;
   }
   try {
-    const response = await fetch(`http://localhost:3000/users/${userId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
+    const response = await deleteWithAuth(
+      `http://localhost:3000/users/${userId}`
+    );
     window.location.reload();
   } catch (err) {
     console.error(err);
@@ -166,6 +152,10 @@ function renderUsers(data, status) {
     const ulAction = document.createElement("ul");
     const liActionFirst = document.createElement("li");
     const aActionFirst = document.createElement("a");
+    aActionFirst.setAttribute("data-toggle", "modal");
+    aActionFirst.setAttribute("data-target", ".bd-example-modal-lg");
+    aActionFirst.setAttribute("data-userid", user.user_id);
+    aActionFirst.addEventListener("click", fillForm);
     aActionFirst.style.cursor = "pointer";
     const editAction = document.createElement("i");
     editAction.classList.add("fal", "fa-pencil");
@@ -199,6 +189,7 @@ function main() {
   activeUsersBtn.addEventListener("click", () =>
     renderUsers(totalUsers, userStatus.isActive)
   );
+  form.addEventListener("submit", validateInputData);
 }
 
 window.addEventListener("load", main);
