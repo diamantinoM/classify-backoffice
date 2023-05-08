@@ -1,10 +1,11 @@
-import { getWithAuth } from "./utils/fetch.js";
-import { showErrorMessage } from "./utils/message-box.js";
+import { getWithAuth, updateWithAuth } from "./utils/fetch.js";
+import { showErrorMessage, showMessage } from "./utils/message-box.js";
 import {
   isValidField,
   allRegexExp,
   isValidDate,
   minDate,
+  AccountStatusEnum,
 } from "./utils/validation.js";
 
 const form = document.getElementById("update-form");
@@ -59,28 +60,66 @@ export async function fillForm({ currentTarget }) {
   }
 }
 
+async function updateUserAccount(URL, data) {
+  try {
+    const response = await updateWithAuth(URL, "PUT", data);
+    response.ok &&
+      (await showMessage(
+        "info",
+        "Dados de utilizador atualizados com sucesso",
+        ["Continuar"],
+        "Dados atualizados"
+      ));
+    window.location.reload();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 export async function validateInputData(event) {
   event.preventDefault();
-  if (
-    !usernameInput.value.length ||
-    !isValidField(allRegexExp.username, usernameInput.value)
-  ) {
+  const formData = new FormData(event.currentTarget);
+  const username = formData.get("username");
+  const email = formData.get("email_addr");
+  const phone = formData.get("phone_number");
+  const birthDate = formData.get("birth_date");
+  const isActiveAccount = activeAccountCheckbox.dataset.status === "active";
+  const URL = form.action;
+  let status;
+
+  if (isActiveAccount && activeAccountCheckbox.checked) {
+    status = AccountStatusEnum.inactive;
+  } else if (!isActiveAccount && activeAccountCheckbox.checked) {
+    status = AccountStatusEnum.active;
+  }
+
+  if (!username.length || !isValidField(allRegexExp.username, username)) {
     return await showErrorMessage("Campo Nome inválido");
-  } else if (
-    !emailInput.value.length ||
-    !isValidField(allRegexExp.email, emailInput.value)
-  ) {
+  } else if (!email.length || !isValidField(allRegexExp.email, email)) {
     return await showErrorMessage("Campo Email inválido");
   }
 
-  if (
-    phoneInput.value.length !== 0 &&
-    !isValidField(allRegexExp.phoneNumber, phoneInput.value)
-  ) {
+  if (phone.length !== 0 && !isValidField(allRegexExp.phoneNumber, phone)) {
     return await showErrorMessage("Número de telemóvel inválido");
   }
 
-  if (dateInput.value && !isValidDate(dateInput.value)) {
+  if (birthDate && !isValidDate(birthDate)) {
     return await showErrorMessage("Data inválida");
   }
+
+  const data = {
+    username,
+    email_addr: email,
+    phone_number: phone,
+    birth_date: birthDate,
+  };
+
+  if (
+    status === AccountStatusEnum.active ||
+    status === AccountStatusEnum.inactive
+  ) {
+    data["is_active"] = status;
+  }
+
+  await updateUserAccount(URL, data);
 }
