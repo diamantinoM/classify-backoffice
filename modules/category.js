@@ -7,6 +7,9 @@ const titleCategory = document.getElementById("category_title");
 const titleSubcategory = document.getElementById("subcategory_title");
 let data;
 
+const BASE_URL_CATEGORIES = "http://localhost:3000/categories";
+const BASE_URL_SUBCATEGORIES = "http://localhost:3000/subcategories";
+
 async function showAllCategories() {
   try {
     const response = await getWithAuth("http://localhost:3000/categories");
@@ -60,20 +63,191 @@ async function deleteCategory({ currentTarget }) {
     console.error(err);
   }
 }
+//EDIT
+async function editCategory({currentTarget}) {
+    const categoryId = currentTarget.dataset.categoryid;
+    const categoryName = currentTarget.dataset.categoryname;
+    
+    const divTable = document.getElementById('categories_table');
+    divTable.classList.remove('table');
+    divTable.style.width = '100%';
+    divTable.innerHTML = '';
+  
+    const divForm = document.createElement('div');
+    const form = document.createElement('form');
+    form.setAttribute('method', 'PUT');
+    form.setAttribute('action', `${BASE_URL_CATEGORIES}`);
+    const formDiv = document.createElement('div');
+    const postFormDiv = document.createElement('div');
+    postFormDiv.className = 'post_form';
+    form.append(formDiv);
+  
+    const formTitle = document.createElement('div');
+    formTitle.classList.add('post_title');
+    const hTitle = document.createElement('h5');
+    hTitle.classList.add('title');
+    hTitle.innerText = 'Editar Categoria';
+    formTitle.appendChild(hTitle);
+  
+    const divCategoryNameInput = document.createElement('div');
+    divCategoryNameInput.classList.add('single_form');
+    const categoryNameInput = document.createElement('input');
+    categoryNameInput.setAttribute('type', 'text');
+    categoryNameInput.setAttribute('name', 'category_name');
+    categoryNameInput.value = categoryName;
+    divCategoryNameInput.appendChild(categoryNameInput);
+  
+    const divSubmitBtn = document.createElement('div');
+    divSubmitBtn.classList.add('single_form');
+    const submitBtn = document.createElement('button');
+    submitBtn.classList.add('main-btn');
+    submitBtn.innerHTML = 'Confirmar Alterações';
+    divSubmitBtn.appendChild(submitBtn);
+  
+    const divBackBtn = document.createElement('div');
+    divBackBtn.classList.add('single_form');
+    const backBtn = document.createElement('button');
+    backBtn.classList.add('main-btn');
+    backBtn.style.backgroundColor = '#42424294';
+    backBtn.innerHTML = 'Voltar';
+    divBackBtn.appendChild(backBtn);
+
+    postFormDiv.append(formTitle, divCategoryNameInput, divSubmitBtn, divBackBtn);
+    formDiv.appendChild(postFormDiv);
+    form.append(formDiv);
+    divForm.appendChild(form);
+    divTable.appendChild(divForm);
+    backBtn.addEventListener('click', async () => {
+        renderModal(data, 'category')
+    });
+    submitBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const categoryName = categoryNameInput.value;
+        try {
+            const response = await fetch(`${BASE_URL_CATEGORIES}/${categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ category_name: categoryName })
+            });
+            if(!response.ok) {
+                return await showErrorMessage();
+            }
+            const successBox = await window.versions.dialog(
+                {type: 'none',
+                message: 'Categoria editada com sucesso!',
+                buttons: ['Continuar'],
+                title: 'Classify | Categoria',
+                icon: './renderer/images/classify-logo.png',
+            });
+            return successBox.then(window.location.reload());
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
+
+async function editSubcategory({currentTarget}) {
+    const subcategoryId = currentTarget.dataset.subcategoryid;
+    const subcategoryName = currentTarget.dataset.subcategoryname;
+    
+    const divTable = document.getElementById('subcategories_table');
+    divTable.classList.remove('table');
+    divTable.style.width = '100%';
+    divTable.innerHTML = '';
+  
+    const divForm = document.createElement('div');
+    const form = document.createElement('form');
+    form.setAttribute('method', 'PUT');
+    form.setAttribute('action', `${BASE_URL_SUBCATEGORIES}`);
+    const formDiv = document.createElement('div');
+    const postFormDiv = document.createElement('div');
+    postFormDiv.className = 'post_form';
+    form.append(formDiv);
+  
+    const formTitle = document.createElement('div');
+    formTitle.classList.add('post_title');
+    const hTitle = document.createElement('h5');
+    hTitle.classList.add('title');
+    hTitle.innerText = 'Editar Categoria';
+    formTitle.appendChild(hTitle);
+  
+    const divSubcategoryNameInput = document.createElement('div');
+    divSubcategoryNameInput.classList.add('single_form');
+    const subcategoryNameInput = document.createElement('input');
+    subcategoryNameInput.setAttribute('type', 'text');
+    subcategoryNameInput.setAttribute('name', 'category_name');
+    subcategoryNameInput.value = subcategoryName;
+    divSubcategoryNameInput.appendChild(subcategoryNameInput);
+  
+    const divSubmitBtn = document.createElement('div');
+    divSubmitBtn.classList.add('single_form');
+    const submitBtn = document.createElement('button');
+    submitBtn.classList.add('main-btn');
+    submitBtn.innerHTML = 'Confirmar Alterações';
+    divSubmitBtn.appendChild(submitBtn);
+
+    const divBackBtn = document.createElement('div');
+    divBackBtn.classList.add('single_form');
+    const backBtn = document.createElement('button');
+    backBtn.classList.add('main-btn');
+    backBtn.style.backgroundColor = '#42424294';
+    backBtn.innerHTML = 'Voltar';
+    divBackBtn.appendChild(backBtn);
+  
+    postFormDiv.append(formTitle, divSubcategoryNameInput, divSubmitBtn, divBackBtn);
+    formDiv.appendChild(postFormDiv);
+    form.append(formDiv);
+    divForm.appendChild(form);
+    divTable.appendChild(divForm);
+    backBtn.addEventListener('click', async () => {
+        renderModal(data, 'subcategory')
+    });
+    submitBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const subcategoryName = subcategoryNameInput.value;
+        try {
+            const response = await fetch(`${BASE_URL_SUBCATEGORIES}/${subcategoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ subcategory_name: subcategoryName })
+            });
+            if(!response.ok) {
+                return await showErrorMessage();
+            }
+            const successBox = await window.versions.dialog(
+                {type: 'none',
+                message: 'Subcategoria editada com sucesso!',
+                buttons: ['Continuar'],
+                title: 'Classify | Subcategoria',
+                icon: './renderer/images/classify-logo.png',
+            });
+            return successBox.then(window.location.reload());
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
+
 //CREATE
 function createCategory() {
-  const divTable = document.getElementById("categories_table");
-  divTable.classList.remove("table");
-  divTable.style.width = "100%";
-  divTable.innerHTML = "";
+  const divTable = document.getElementById('categories_table');
+  divTable.classList.remove('table');
+  divTable.style.width = '100%';
+  divTable.innerHTML = '';
 
-  const divForm = document.createElement("div");
-  const form = document.createElement("form");
-  form.setAttribute("method", "POST");
-  form.setAttribute("action", "http://localhost:3000/categories");
-  const formDiv = document.createElement("div");
-  const postFormDiv = document.createElement("div");
-  postFormDiv.className = "post_form";
+  const divForm = document.createElement('div');
+  const form = document.createElement('form');
+  form.setAttribute('method', 'POST');
+  form.setAttribute('action', `${BASE_URL_CATEGORIES}`);
+  const formDiv = document.createElement('div');
+  const postFormDiv = document.createElement('div');
+  postFormDiv.className = 'post_form';
   form.append(formDiv);
 
   const formTitle = document.createElement("div");
@@ -119,12 +293,13 @@ function createCategory() {
   form.append(formDiv);
   divForm.appendChild(form);
   divTable.appendChild(divForm);
+
   submitBtn.addEventListener("click", async (event) => {
     event.preventDefault();
     const categoryName = categoryNameInput.value;
     const categoryIcon = categoryIconInput.value;
     try {
-      const response = await postWithAuth(`http://localhost:3000/categories`, {
+      const response = await postWithAuth(`${BASE_URL_CATEGORIES}`, {
         category_name: categoryName,
         category_icon: categoryIcon,
       });
@@ -143,18 +318,19 @@ function createCategory() {
 }
 
 function createSubcategory() {
-  const divTable = document.getElementById("subcategories_table");
-  divTable.classList.remove("table");
-  divTable.style.width = "100%";
-  divTable.innerHTML = "";
+  const divTable = document.getElementById('subcategories_table');
+  divTable.classList.remove('table');
+  divTable.style.width = '100%';
+  divTable.innerHTML = '';
 
-  const divForm = document.createElement("div");
-  const form = document.createElement("form");
-  form.setAttribute("method", "POST");
-  form.setAttribute("action", "http://localhost:3000/subcategories");
-  const formDiv = document.createElement("div");
-  const postFormDiv = document.createElement("div");
-  postFormDiv.className = "post_form";
+  const divForm = document.createElement('div');
+  const form = document.createElement('form');
+  form.setAttribute('method', 'POST');
+  form.setAttribute('action', `${BASE_URL_SUBCATEGORIES}`);
+  const formDiv = document.createElement('div');
+  const postFormDiv = document.createElement('div');
+  postFormDiv.className = 'post_form';
+
   form.append(formDiv);
 
   const formTitle = document.createElement("div");
@@ -203,7 +379,7 @@ function createSubcategory() {
     const categoryId = categoryIdInput.value;
     try {
       const response = await postWithAuth(
-        `http://localhost:3000/subcategories`,
+        `${BASE_URL_SUBCATEGORIES}`,
         {
           subcategory_name: subcategoryName,
           category_id: categoryId,
@@ -317,12 +493,14 @@ function renderModal(data, option) {
       iDeleteAction.className = "fal fa-trash-alt";
       liDeleteAction.appendChild(aDeleteAction);
       aDeleteAction.appendChild(iDeleteAction);
-
-      const liEditAction = document.createElement("li");
-      const aEditAction = document.createElement("a");
-      aEditAction.style.cursor = "pointer";
-      const iEditAction = document.createElement("i");
-      iEditAction.className = "fal fa-pencil";
+      
+      const liEditAction = document.createElement('li');
+      const aEditAction = document.createElement('a');
+      aEditAction.setAttribute('data-categoryid', `${category.id}`);
+      aEditAction.setAttribute('data-categoryname', `${category.category_name}`);
+      aEditAction.style.cursor = 'pointer';
+      const iEditAction = document.createElement('i');
+      iEditAction.className = 'fal fa-pencil';
       liEditAction.appendChild(aEditAction);
       aEditAction.appendChild(iEditAction);
       ulAction.append(liEditAction, liDeleteAction);
@@ -331,112 +509,117 @@ function renderModal(data, option) {
       row.append(tdIcon, tdTitle, tdAction);
       body.appendChild(row);
 
-      aDeleteAction.addEventListener("click", deleteCategory);
-    });
+      aEditAction.addEventListener('click', editCategory);
+      aDeleteAction.addEventListener('click', deleteCategory);
+      });
   }
-  if (option === "subcategory") {
-    const divCreate = document.createElement("div");
-    divCreate.classList.add("col-sm-4");
-    const divSingleCreate = document.createElement("div");
-    divSingleCreate.className = "single_dashboard_box d-flex";
+  if (option === 'subcategory') {
+      const divCreate = document.createElement('div');
+      divCreate.classList.add('col-sm-4');
+      const divSingleCreate = document.createElement('div');
+      divSingleCreate.className = 'single_dashboard_box d-flex';
+  
+      const divIcon = document.createElement('div');
+      divIcon.classList.add('box_icon');
+      const aIcon = document.createElement('a');
+      aIcon.style.cursor = 'pointer';
+      const iIcon = document.createElement('i');
+      iIcon.className = 'fal fa-plus';
+      aIcon.appendChild(iIcon);
+      divIcon.appendChild(aIcon);
+      const divTextCreate = document.createElement('div');
+      divTextCreate.className = 'box_content media-body';
+      divTextCreate.style = 'padding-top: 0.7rem; padding-left: 1rem;';
+      const h6Create = document.createElement('h6');
+      h6Create.classList.add('title');
+      const aCreate = document.createElement('a');
+      aCreate.setAttribute('id', 'create_subcategory');
+      aCreate.style.cursor = 'pointer';
+      aCreate.innerText = 'Criar Subcategoria';
+      h6Create.appendChild(aCreate);
+      divTextCreate.appendChild(h6Create);
+      divSingleCreate.append(divIcon, divTextCreate);
+      divCreate.appendChild(divSingleCreate);
 
-    const divIcon = document.createElement("div");
-    divIcon.classList.add("box_icon");
-    const aIcon = document.createElement("a");
-    aIcon.style.cursor = "pointer";
-    const iIcon = document.createElement("i");
-    iIcon.className = "fal fa-plus";
-    aIcon.appendChild(iIcon);
-    divIcon.appendChild(aIcon);
-    const divTextCreate = document.createElement("div");
-    divTextCreate.className = "box_content media-body";
-    divTextCreate.style = "padding-top: 0.7rem; padding-left: 1rem;";
-    const h6Create = document.createElement("h6");
-    h6Create.classList.add("title");
-    const aCreate = document.createElement("a");
-    aCreate.setAttribute("id", "create_subcategory");
-    aCreate.style.cursor = "pointer";
-    aCreate.innerText = "Criar Subcategoria";
-    h6Create.appendChild(aCreate);
-    divTextCreate.appendChild(h6Create);
-    divSingleCreate.append(divIcon, divTextCreate);
-    divCreate.appendChild(divSingleCreate);
+      const divTable = document.createElement('div');
+      divTable.className = 'ads_table table-responsive mt-30';
+      divTable.style = 'overflow-y: scroll; height: 30rem;';
+      const table = document.createElement('table');
+      table.id = 'subcategories_table';
+      table.classList.add('table');
+      const head = document.createElement('thead');
+      const row = document.createElement('tr');
+      const thIcon = document.createElement('th');
+      thIcon.classList.add('title');
+      thIcon.innerText = 'Ícone';
+      const thTitle = document.createElement('th');
+      thTitle.classList.add('title');
+      thTitle.innerText = 'Título';
+      const thAction = document.createElement('th');
+      thAction.classList.add('action');
+      thAction.innerHTML = 'Ação';
+      const body = document.createElement('tbody');
+      body.setAttribute('id', 'table_body');
+      divTable.appendChild(table);
+      table.append(head, body);
+      head.appendChild(row);
+      row.append(thIcon, thTitle, thAction);
 
-    const divTable = document.createElement("div");
-    divTable.className = "ads_table table-responsive mt-30";
-    divTable.style = "overflow-y: scroll; height: 30rem;";
-    const table = document.createElement("table");
-    table.id = "subcategories_table";
-    table.classList.add("table");
-    const head = document.createElement("thead");
-    const row = document.createElement("tr");
-    const thIcon = document.createElement("th");
-    thIcon.classList.add("title");
-    thIcon.innerText = "Ícone";
-    const thTitle = document.createElement("th");
-    thTitle.classList.add("title");
-    thTitle.innerText = "Título";
-    const thAction = document.createElement("th");
-    thAction.classList.add("action");
-    thAction.innerHTML = "Ação";
-    const body = document.createElement("tbody");
-    body.setAttribute("id", "table_body");
-    divTable.appendChild(table);
-    table.append(head, body);
-    head.appendChild(row);
-    row.append(thIcon, thTitle, thAction);
+      modalContent.append(divCreate, divTable);
+      
+      divSingleCreate.addEventListener('click', createSubcategory);
+      allCategories.forEach((category) => {
+          category.Subcategories.forEach((subcategory) => {
+              const row = document.createElement('tr');
+              const tdIcon = document.createElement('td');
+              tdIcon.classList.add('photo');
+              const categoryIcon = document.createElement('i');
+              categoryIcon.style = 'font-size: 2.6rem; color: #ff4367';
+              categoryIcon.className = `${category.category_icon}`;
+              tdIcon.appendChild(categoryIcon);
 
-    modalContent.append(divCreate, divTable);
+              const tdTitle = document.createElement('td');
+              tdTitle.classList.add('title');
+              const divTitle = document.createElement('div');
+              divTitle.classList.add('table_title');
+              const h6Title = document.createElement('h6');
+              h6Title.classList.add('titles');
+              h6Title.innerText = `${subcategory.subcategory_name}`;
+              divTitle.appendChild(h6Title);
+              tdTitle.appendChild(divTitle);
+              const tdAction = document.createElement('td');
+              tdAction.classList.add('action');
+              const divAction = document.createElement('div');
+              divAction.classList.add('table_action');
 
-    divSingleCreate.addEventListener("click", createSubcategory);
-    allCategories.forEach((category) => {
-      category.Subcategories.forEach((subcategory) => {
-        const row = document.createElement("tr");
-        const tdIcon = document.createElement("td");
-        tdIcon.classList.add("photo");
-        const categoryIcon = document.createElement("i");
-        categoryIcon.style = "font-size: 2.6rem; color: #ff4367";
-        categoryIcon.className = `${category.category_icon}`;
-        tdIcon.appendChild(categoryIcon);
+              const ulAction = document.createElement('ul');
+              const liDeleteAction = document.createElement('li');
+              const aDeleteAction = document.createElement('a');
+              aDeleteAction.setAttribute('data-subcategoryid', `${subcategory.id}`);
+              aDeleteAction.style.cursor = 'pointer';
+              const iDeleteAction = document.createElement('i');
+              iDeleteAction.className = 'fal fa-trash-alt';
+              liDeleteAction.appendChild(aDeleteAction);
+              aDeleteAction.appendChild(iDeleteAction);
+              
+              const liEditAction = document.createElement('li');
+              const aEditAction = document.createElement('a');
+              aEditAction.setAttribute('data-subcategoryid', `${subcategory.id}`);
+              aEditAction.setAttribute('data-subcategoryname', `${subcategory.subcategory_name}`);
+              aEditAction.style.cursor = 'pointer';
+              const iEditAction = document.createElement('i');
+              iEditAction.className = 'fal fa-pencil';
+              liEditAction.appendChild(aEditAction);
+              aEditAction.appendChild(iEditAction);
+              ulAction.append(liEditAction, liDeleteAction);
+              divAction.appendChild(ulAction);
+              tdAction.appendChild(divAction);
+              row.append(tdIcon, tdTitle, tdAction);
+              body.appendChild(row);
 
-        const tdTitle = document.createElement("td");
-        tdTitle.classList.add("title");
-        const divTitle = document.createElement("div");
-        divTitle.classList.add("table_title");
-        const h6Title = document.createElement("h6");
-        h6Title.classList.add("titles");
-        h6Title.innerText = `${subcategory.subcategory_name}`;
-        divTitle.appendChild(h6Title);
-        tdTitle.appendChild(divTitle);
-        const tdAction = document.createElement("td");
-        tdAction.classList.add("action");
-        const divAction = document.createElement("div");
-        divAction.classList.add("table_action");
-
-        const ulAction = document.createElement("ul");
-        const liDeleteAction = document.createElement("li");
-        const aDeleteAction = document.createElement("a");
-        aDeleteAction.setAttribute("data-subcategoryid", `${subcategory.id}`);
-        aDeleteAction.style.cursor = "pointer";
-        const iDeleteAction = document.createElement("i");
-        iDeleteAction.className = "fal fa-trash-alt";
-        liDeleteAction.appendChild(aDeleteAction);
-        aDeleteAction.appendChild(iDeleteAction);
-
-        const liEditAction = document.createElement("li");
-        const aEditAction = document.createElement("a");
-        aEditAction.style.cursor = "pointer";
-        const iEditAction = document.createElement("i");
-        iEditAction.className = "fal fa-pencil";
-        liEditAction.appendChild(aEditAction);
-        aEditAction.appendChild(iEditAction);
-        ulAction.append(liEditAction, liDeleteAction);
-        divAction.appendChild(ulAction);
-        tdAction.appendChild(divAction);
-        row.append(tdIcon, tdTitle, tdAction);
-        body.appendChild(row);
-
-        aDeleteAction.addEventListener("click", deleteSubcategory);
+              aEditAction.addEventListener('click', editSubcategory);
+              aDeleteAction.addEventListener('click', deleteSubcategory);
+          });
       });
     });
   }
