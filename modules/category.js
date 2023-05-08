@@ -13,9 +13,12 @@ const subcategory = titleSubcategory.addEventListener('click', async () => {
 });
 let data;
 
+const BASE_URL_CATEGORIES = "http://localhost:3000/categories";
+const BASE_URL_SUBCATEGORIES = "http://localhost:3000/subcategories";
+
 async function showAllCategories() {
   try {
-    const response = await fetch("http://localhost:3000/categories", {
+    const response = await fetch(`${BASE_URL_CATEGORIES}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +49,7 @@ async function deleteSubcategory({currentTarget}) {
       return;
   }
   try {
-      const response = await fetch(`http://localhost:3000/subcategories/${subcategoryId}`, {
+      const response = await fetch(`${BASE_URL_SUBCATEGORIES}/${subcategoryId}`, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json',
@@ -76,7 +79,7 @@ async function deleteCategory({currentTarget}) {
       return;
   }
   try {
-      const response = await fetch(`http://localhost:3000/categories/${categoryId}`, {
+      const response = await fetch(`${BASE_URL_CATEGORIES}/${categoryId}`, {
           method: 'DELETE',
           headers: {
               'Content-Type': 'application/json',
@@ -91,6 +94,177 @@ async function deleteCategory({currentTarget}) {
       console.error(err);
   }
 }
+//EDIT
+async function editCategory({currentTarget}) {
+    const categoryId = currentTarget.dataset.categoryid;
+    const categoryName = currentTarget.dataset.categoryname;
+    
+    const divTable = document.getElementById('categories_table');
+    divTable.classList.remove('table');
+    divTable.style.width = '100%';
+    divTable.innerHTML = '';
+  
+    const divForm = document.createElement('div');
+    const form = document.createElement('form');
+    form.setAttribute('method', 'PUT');
+    form.setAttribute('action', `${BASE_URL_CATEGORIES}`);
+    const formDiv = document.createElement('div');
+    const postFormDiv = document.createElement('div');
+    postFormDiv.className = 'post_form';
+    form.append(formDiv);
+  
+    const formTitle = document.createElement('div');
+    formTitle.classList.add('post_title');
+    const hTitle = document.createElement('h5');
+    hTitle.classList.add('title');
+    hTitle.innerText = 'Editar Categoria';
+    formTitle.appendChild(hTitle);
+  
+    const divCategoryNameInput = document.createElement('div');
+    divCategoryNameInput.classList.add('single_form');
+    const categoryNameInput = document.createElement('input');
+    categoryNameInput.setAttribute('type', 'text');
+    categoryNameInput.setAttribute('name', 'category_name');
+    categoryNameInput.value = categoryName;
+    divCategoryNameInput.appendChild(categoryNameInput);
+  
+    const divSubmitBtn = document.createElement('div');
+    divSubmitBtn.classList.add('single_form');
+    const submitBtn = document.createElement('button');
+    submitBtn.classList.add('main-btn');
+    submitBtn.innerHTML = 'Confirmar Alterações';
+    divSubmitBtn.appendChild(submitBtn);
+  
+    const divBackBtn = document.createElement('div');
+    divBackBtn.classList.add('single_form');
+    const backBtn = document.createElement('button');
+    backBtn.classList.add('main-btn');
+    backBtn.style.backgroundColor = '#42424294';
+    backBtn.innerHTML = 'Voltar';
+    divBackBtn.appendChild(backBtn);
+
+    postFormDiv.append(formTitle, divCategoryNameInput, divSubmitBtn, divBackBtn);
+    formDiv.appendChild(postFormDiv);
+    form.append(formDiv);
+    divForm.appendChild(form);
+    divTable.appendChild(divForm);
+    backBtn.addEventListener('click', async () => {
+        renderModal(data, 'category')
+    });
+    submitBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const categoryName = categoryNameInput.value;
+        try {
+            const response = await fetch(`${BASE_URL_CATEGORIES}/${categoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ category_name: categoryName })
+            });
+            if(!response.ok) {
+                return await showErrorMessage();
+            }
+            const successBox = await window.versions.dialog(
+                {type: 'none',
+                message: 'Categoria editada com sucesso!',
+                buttons: ['Continuar'],
+                title: 'Classify | Categoria',
+                icon: './renderer/images/classify-logo.png',
+            });
+            return successBox.then(window.location.reload());
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
+
+async function editSubcategory({currentTarget}) {
+    const subcategoryId = currentTarget.dataset.subcategoryid;
+    const subcategoryName = currentTarget.dataset.subcategoryname;
+    
+    const divTable = document.getElementById('subcategories_table');
+    divTable.classList.remove('table');
+    divTable.style.width = '100%';
+    divTable.innerHTML = '';
+  
+    const divForm = document.createElement('div');
+    const form = document.createElement('form');
+    form.setAttribute('method', 'PUT');
+    form.setAttribute('action', `${BASE_URL_SUBCATEGORIES}`);
+    const formDiv = document.createElement('div');
+    const postFormDiv = document.createElement('div');
+    postFormDiv.className = 'post_form';
+    form.append(formDiv);
+  
+    const formTitle = document.createElement('div');
+    formTitle.classList.add('post_title');
+    const hTitle = document.createElement('h5');
+    hTitle.classList.add('title');
+    hTitle.innerText = 'Editar Categoria';
+    formTitle.appendChild(hTitle);
+  
+    const divSubcategoryNameInput = document.createElement('div');
+    divSubcategoryNameInput.classList.add('single_form');
+    const subcategoryNameInput = document.createElement('input');
+    subcategoryNameInput.setAttribute('type', 'text');
+    subcategoryNameInput.setAttribute('name', 'category_name');
+    subcategoryNameInput.value = subcategoryName;
+    divSubcategoryNameInput.appendChild(subcategoryNameInput);
+  
+    const divSubmitBtn = document.createElement('div');
+    divSubmitBtn.classList.add('single_form');
+    const submitBtn = document.createElement('button');
+    submitBtn.classList.add('main-btn');
+    submitBtn.innerHTML = 'Confirmar Alterações';
+    divSubmitBtn.appendChild(submitBtn);
+
+    const divBackBtn = document.createElement('div');
+    divBackBtn.classList.add('single_form');
+    const backBtn = document.createElement('button');
+    backBtn.classList.add('main-btn');
+    backBtn.style.backgroundColor = '#42424294';
+    backBtn.innerHTML = 'Voltar';
+    divBackBtn.appendChild(backBtn);
+  
+    postFormDiv.append(formTitle, divSubcategoryNameInput, divSubmitBtn, divBackBtn);
+    formDiv.appendChild(postFormDiv);
+    form.append(formDiv);
+    divForm.appendChild(form);
+    divTable.appendChild(divForm);
+    backBtn.addEventListener('click', async () => {
+        renderModal(data, 'subcategory')
+    });
+    submitBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const subcategoryName = subcategoryNameInput.value;
+        try {
+            const response = await fetch(`${BASE_URL_SUBCATEGORIES}/${subcategoryId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ subcategory_name: subcategoryName })
+            });
+            if(!response.ok) {
+                return await showErrorMessage();
+            }
+            const successBox = await window.versions.dialog(
+                {type: 'none',
+                message: 'Subcategoria editada com sucesso!',
+                buttons: ['Continuar'],
+                title: 'Classify | Subcategoria',
+                icon: './renderer/images/classify-logo.png',
+            });
+            return successBox.then(window.location.reload());
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
+
 //CREATE
 function createCategory() {
   const divTable = document.getElementById('categories_table');
@@ -101,7 +275,7 @@ function createCategory() {
   const divForm = document.createElement('div');
   const form = document.createElement('form');
   form.setAttribute('method', 'POST');
-  form.setAttribute('action', 'http://localhost:3000/categories');
+  form.setAttribute('action', `${BASE_URL_CATEGORIES}`);
   const formDiv = document.createElement('div');
   const postFormDiv = document.createElement('div');
   postFormDiv.className = 'post_form';
@@ -147,7 +321,7 @@ function createCategory() {
       const categoryName = categoryNameInput.value;
       const categoryIcon = categoryIconInput.value;
       try {
-          const response = await fetch(`http://localhost:3000/categories`, {
+          const response = await fetch(`${BASE_URL_CATEGORIES}`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -181,7 +355,7 @@ function createSubcategory() {
   const divForm = document.createElement('div');
   const form = document.createElement('form');
   form.setAttribute('method', 'POST');
-  form.setAttribute('action', 'http://localhost:3000/subcategories');
+  form.setAttribute('action', `${BASE_URL_SUBCATEGORIES}`);
   const formDiv = document.createElement('div');
   const postFormDiv = document.createElement('div');
   postFormDiv.className = 'post_form';
@@ -227,7 +401,7 @@ function createSubcategory() {
       const subcategoryName = subcategoryNameInput.value;
       const categoryId = categoryIdInput.value;
       try {
-          const response = await fetch(`http://localhost:3000/subcategories`, {
+          const response = await fetch(`${BASE_URL_SUBCATEGORIES}`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -349,6 +523,8 @@ function renderModal(data, option) {
       
       const liEditAction = document.createElement('li');
       const aEditAction = document.createElement('a');
+      aEditAction.setAttribute('data-categoryid', `${category.id}`);
+      aEditAction.setAttribute('data-categoryname', `${category.category_name}`);
       aEditAction.style.cursor = 'pointer';
       const iEditAction = document.createElement('i');
       iEditAction.className = 'fal fa-pencil';
@@ -360,7 +536,7 @@ function renderModal(data, option) {
       row.append(tdIcon, tdTitle, tdAction);
       body.appendChild(row);
       
-      
+      aEditAction.addEventListener('click', editCategory);
       aDeleteAction.addEventListener('click', deleteCategory);
       });
   }
@@ -455,6 +631,8 @@ function renderModal(data, option) {
               
               const liEditAction = document.createElement('li');
               const aEditAction = document.createElement('a');
+              aEditAction.setAttribute('data-subcategoryid', `${subcategory.id}`);
+              aEditAction.setAttribute('data-subcategoryname', `${subcategory.subcategory_name}`);
               aEditAction.style.cursor = 'pointer';
               const iEditAction = document.createElement('i');
               iEditAction.className = 'fal fa-pencil';
@@ -466,6 +644,7 @@ function renderModal(data, option) {
               row.append(tdIcon, tdTitle, tdAction);
               body.appendChild(row);
 
+              aEditAction.addEventListener('click', editSubcategory);
               aDeleteAction.addEventListener('click', deleteSubcategory);
           });
       });
