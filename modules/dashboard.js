@@ -1,5 +1,5 @@
 import { buildAdInfo, setApprovingEvent } from "./ad-handler.js";
-import { showErrorMessage, showMessage } from "./utils/message-box.js";
+import { showMessage } from "./utils/message-box.js";
 import { getWithAuth, deleteWithAuth } from "./utils/fetch.js";
 import {
   createElementWithClass,
@@ -20,9 +20,6 @@ async function fetchAdData({ currentTarget }) {
 
   try {
     const response = await getWithAuth(`http://localhost:3000/ads/${adId}`);
-    if (!response.ok) {
-      return await showErrorMessage();
-    }
     const { ad } = await response.json();
     buildAdInfo(ad);
   } catch (err) {
