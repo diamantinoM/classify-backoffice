@@ -17,3 +17,18 @@ export const allRegexExp = {
   email: /^\w+@\w+\.[a-zA-Z]{2,}$/,
   phoneNumber: /(^(\d\s?){9}$)|(^\+(\d\s?){12}$)/,
 };
+
+export const AccountStatusEnum = Object.create(Object, {
+  active: {
+    writable: false,
+    configurable: false,
+    enumerable: true,
+    value: 1,
+  },
+  inactive: {
+    writable: false,
+    configurable: false,
+    enumerable: true,
+    value: 0,
+  },
+});
