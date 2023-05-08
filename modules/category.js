@@ -275,7 +275,7 @@ function createCategory() {
   const divForm = document.createElement('div');
   const form = document.createElement('form');
   form.setAttribute('method', 'POST');
-  form.setAttribute('action', `${BASE_URL}`);
+  form.setAttribute('action', `${BASE_URL_CATEGORIES}`);
   const formDiv = document.createElement('div');
   const postFormDiv = document.createElement('div');
   postFormDiv.className = 'post_form';
