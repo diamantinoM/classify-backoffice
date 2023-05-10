@@ -16,7 +16,7 @@ async function approveAd({ currentTarget }) {
 
   try {
     const response = await updateWithAuth(
-      `http://localhost:3000/ads/${adId}`,
+      `https://api.classify.pt/ads/${adId}`,
       "PATCH",
       { status_id: APPROVED_STATUS }
     );

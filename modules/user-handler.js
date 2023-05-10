@@ -15,7 +15,7 @@ const phoneInput = document.querySelector('input[name="phone_number"]');
 const dateInput = document.querySelector('input[name="birth_date"]');
 const activeAccountCheckbox = document.querySelector('input[name="is_active"]');
 
-const BASE_URL = "http://localhost:3000/users";
+const BASE_URL = "https://api.classify.pt/users";
 
 function checkUserAccountStatus(isActive) {
   let checkboxParent = activeAccountCheckbox.closest("div");

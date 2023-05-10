@@ -12,7 +12,7 @@ let totalUsers = [];
 
 async function showAllUsers() {
   try {
-    const response = await getWithAuth("http://localhost:3000/users");
+    const response = await getWithAuth("https://api.classify.pt/users");
     const { users } = await response.json();
     totalUsers = users;
     const inactiveUsers = users.filter(
@@ -42,7 +42,7 @@ async function deleteUser({ currentTarget }) {
   }
   try {
     const response = await deleteWithAuth(
-      `http://localhost:3000/users/${userId}`
+      `https://api.classify.pt/users/${userId}`
     );
     window.location.reload();
   } catch (err) {
