@@ -1,18 +1,26 @@
 {
   "name": "classify",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a BackOffice for our Classify project",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
-  "author": "",
+  "author": "Classify",
   "license": "ISC",
   "devDependencies": {
+    "@electron-forge/cli": "^6.1.1",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
     "electron": "^24.1.2"
   },
   "dependencies": {
     "electron-alert": "^0.1.20",
+    "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "safe-storage": "^1.0.2",
     "secure-electron-store": "^4.0.2",
