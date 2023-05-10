@@ -1,5 +1,5 @@
 const path = require('path');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const { dialog } = require('electron');
 const { getWindowSettings, saveBounds, savePosition, getWindowPosition } = require('./settings')
 
@@ -30,6 +30,8 @@ function createMainWindow () {
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, './renderer/sign-in.html'));
 }   
+
+Menu.setApplicationMenu(null);
 
 app.whenReady().then(() => {
     createMainWindow();
