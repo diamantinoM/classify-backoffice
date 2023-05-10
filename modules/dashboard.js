@@ -19,7 +19,7 @@ async function fetchAdData({ currentTarget }) {
   const adId = currentTarget.dataset.adid;
 
   try {
-    const response = await getWithAuth(`http://localhost:3000/ads/${adId}`);
+    const response = await getWithAuth(`https://api.classify.pt/ads/${adId}`);
     const { ad } = await response.json();
     buildAdInfo(ad);
   } catch (err) {
@@ -29,7 +29,7 @@ async function fetchAdData({ currentTarget }) {
 
 async function showAllAds() {
   try {
-    const response = await getWithAuth("http://localhost:3000/ads");
+    const response = await getWithAuth("https://api.classify.pt/ads");
     const { ads } = await response.json();
     totalAds = ads;
 
@@ -56,7 +56,7 @@ async function deleteAd({ currentTarget }) {
     return;
   }
   try {
-    const response = await deleteWithAuth(`http://localhost:3000/ads/${adId}`);
+    const response = await deleteWithAuth(`https://api.classify.pt/ads/${adId}`);
     window.location.reload();
   } catch (err) {
     console.error(err);

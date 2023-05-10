@@ -7,7 +7,7 @@ async function signIn(event) {
   const email = formData.get("email");
   const password = formData.get("password");
   try {
-    const response = await fetch("http://localhost:3000/token", {
+    const response = await fetch("https://api.classify.pt/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

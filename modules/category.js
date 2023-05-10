@@ -12,12 +12,12 @@ const titleCategory = document.getElementById("category_title");
 const titleSubcategory = document.getElementById("subcategory_title");
 let data;
 
-const BASE_URL_CATEGORIES = "http://localhost:3000/categories";
-const BASE_URL_SUBCATEGORIES = "http://localhost:3000/subcategories";
+const BASE_URL_CATEGORIES = "https://api.classify.pt/categories";
+const BASE_URL_SUBCATEGORIES = "https://api.classify.pt/subcategories";
 
 async function showAllCategories() {
   try {
-    const response = await getWithAuth("http://localhost:3000/categories");
+    const response = await getWithAuth(`${BASE_URL_CATEGORIES}`);
     data = await response.json();
     renderCategories(data);
   } catch (err) {
@@ -39,7 +39,7 @@ async function deleteSubcategory({ currentTarget }) {
   }
   try {
     const response = await deleteWithAuth(
-      `http://localhost:3000/subcategories/${subcategoryId}`
+      `${BASE_URL_SUBCATEGORIES}/${subcategoryId}`
     );
     window.location.reload();
   } catch (err) {
@@ -61,7 +61,7 @@ async function deleteCategory({ currentTarget }) {
   }
   try {
     const response = await deleteWithAuth(
-      `http://localhost:3000/categories/${categoryId}`
+      `${BASE_URL_CATEGORIES}/${categoryId}`
     );
     window.location.reload();
   } catch (err) {
